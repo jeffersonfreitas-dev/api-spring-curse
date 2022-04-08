@@ -44,20 +44,38 @@ public class JWTTokenAutenticacaoService {
 	
 	
 	//Retorna o user validado com token ou null se não for válido
-	public Authentication getAuthentication(HttpServletRequest request) {
+	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) {
 	
 		String token = request.getHeader(HEADER_STRING);
 		if(token == null) return null;
 		
+		String tokenPuro = token.replace(TOKEN_PREFIX, "");
 		String user = Jwts.parser()
 				.setSigningKey(SECRET)
-				.parseClaimsJws(token.replace(TOKEN_PREFIX, ""))
+				.parseClaimsJws(tokenPuro)
 				.getBody().getSubject();
 		if(user == null) return null;
 		
 		Usuario usuario = repository.findByLogin(user)
 				.orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+		
+		if(!tokenPuro.equalsIgnoreCase(usuario.getToken())) throw new IllegalArgumentException("Usuário com o token inválido");
+		
+		liberarCORS(response);
+		
 		return new UsernamePasswordAuthenticationToken(usuario.getLogin(), usuario.getPassword(), usuario.getAuthorities());		
+	}
+
+
+
+	private void liberarCORS(HttpServletResponse response) {
+		final String ACCESS_ALLOW = "Access-Control-Allow";
+		final String ACCESS_REQUEST = "Access-Control-Request";
+		
+		if(response.getHeader(ACCESS_ALLOW + "-Origin") == null) response.addHeader(ACCESS_ALLOW+ "-Origin", "*");
+		if(response.getHeader(ACCESS_ALLOW + "-Headers") == null) response.addHeader(ACCESS_ALLOW+ "-Headers", "*");
+		if(response.getHeader(ACCESS_REQUEST+ "-Headers") == null) response.addHeader(ACCESS_ALLOW+ "-Headers", "*");
+		if(response.getHeader(ACCESS_REQUEST + "-Methods") == null) response.addHeader(ACCESS_ALLOW+ "-Methods", "*");
 	}
 	
 	
