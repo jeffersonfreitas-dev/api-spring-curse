@@ -38,6 +38,8 @@ public class JWTTokenAutenticacaoService {
 		
 		String token = TOKEN_PREFIX + " " + jwt;
 		response.addHeader(HEADER_STRING, token);
+		
+		liberarCORS(response);
 		response.getWriter().write("{\"Authorization\": \""+token+"\"}"); //Escrever no corpo
 	}
 	

@@ -14,6 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jefferson.restapispring.model.Usuario;
 import com.jefferson.restapispring.repository.UsuarioRepository;
@@ -33,7 +34,9 @@ public class JWTTokenAutenticacaoController extends AbstractAuthenticationProces
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
-		Usuario user = new ObjectMapper().readValue(request.getInputStream(), Usuario.class);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true);
+		Usuario user = mapper.readValue(request.getInputStream(), Usuario.class);
 		return getAuthenticationManager().authenticate(
 				new UsernamePasswordAuthenticationToken(user.getLogin(), user.getSenha(), user.getAuthorities()));
 	}

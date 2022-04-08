@@ -13,10 +13,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "usuarios")
+@NoArgsConstructor
 public class Usuario implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
