@@ -48,24 +48,27 @@ public class JWTTokenAutenticacaoService {
 	//Retorna o user validado com token ou null se não for válido
 	public Authentication getAuthentication(HttpServletRequest request, HttpServletResponse response) {
 	
+
 		String token = request.getHeader(HEADER_STRING);
-		if(token == null) return null;
-		
-		String tokenPuro = token.replace(TOKEN_PREFIX, "");
-		String user = Jwts.parser()
-				.setSigningKey(SECRET)
-				.parseClaimsJws(tokenPuro)
-				.getBody().getSubject();
-		if(user == null) return null;
-		
-		Usuario usuario = repository.findByLogin(user)
-				.orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
-		
-		if(!tokenPuro.equalsIgnoreCase(usuario.getToken())) throw new IllegalArgumentException("Usuário com o token inválido");
-		
-		liberarCORS(response);
-		
-		return new UsernamePasswordAuthenticationToken(usuario.getLogin(), usuario.getPassword(), usuario.getAuthorities());		
+		if(token != null) {
+			String tokenPuro = token.replace(TOKEN_PREFIX, "");
+			String user = Jwts.parser()
+					.setSigningKey(SECRET)
+					.parseClaimsJws(tokenPuro)
+					.getBody().getSubject();
+			if(user == null) return null;
+			
+			Usuario usuario = repository.findByLogin(user)
+					.orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
+			
+//		if(!usuario.getToken().equalsIgnoreCase(tokenPuro.trim())) throw new IllegalArgumentException("Usuário com o token inválido");
+			
+			liberarCORS(response);
+			return new UsernamePasswordAuthenticationToken(usuario.getLogin(), usuario.getPassword(), usuario.getAuthorities());		
+		}else {
+			liberarCORS(response);
+			return null;
+		}
 	}
 
 
