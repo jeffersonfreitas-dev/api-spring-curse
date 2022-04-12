@@ -23,4 +23,15 @@ public class UsuarioServiceImpl implements UsuarioService{
 		return entities.stream().map(Usuario::convertToResponse).collect(Collectors.toList());
 	}
 
+	@Override
+	public String deleteById(String id) {
+		try {
+			repository.deleteById(id);
+			return "Registro deletado com sucesso";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Ocorreu um erro ao deletar o registro";
+		}
+	}
+
 }

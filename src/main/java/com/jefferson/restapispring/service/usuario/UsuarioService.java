@@ -8,4 +8,6 @@ public interface UsuarioService {
 
 	List<UsuarioResponse> findAllUsers();
 
+	String deleteById(String id);
+
 }
