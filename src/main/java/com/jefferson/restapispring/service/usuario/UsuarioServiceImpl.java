@@ -34,4 +34,14 @@ public class UsuarioServiceImpl implements UsuarioService{
 		}
 	}
 
+	@Override
+	public List<Usuario> findAllByName(String nome) {
+		try {
+			return repository.findAllByName(nome);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException("Erro ao pesquisar o usuário por nome");
+		}
+	}
+
 }
