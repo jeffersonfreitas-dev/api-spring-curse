@@ -59,16 +59,13 @@ public class JWTTokenAutenticacaoService {
 			if(user == null) return null;
 			
 			Usuario usuario = repository.findByLogin(user)
-					.orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
-			
-//		if(!usuario.getToken().equalsIgnoreCase(tokenPuro.trim())) throw new IllegalArgumentException("Usuário com o token inválido");
+					.orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado, erro na validação do token"));
 			
 			liberarCORS(response);
 			return new UsernamePasswordAuthenticationToken(usuario.getLogin(), usuario.getPassword(), usuario.getAuthorities());		
-		}else {
-			liberarCORS(response);
-			return null;
 		}
+		liberarCORS(response);
+		return null;
 	}
 
 

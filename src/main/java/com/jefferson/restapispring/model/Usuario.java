@@ -2,16 +2,19 @@ package com.jefferson.restapispring.model;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.jefferson.restapispring.dto.UsuarioDto;
 import com.jefferson.restapispring.dto.UsuarioResponse;
 
 import lombok.Data;
@@ -35,8 +38,17 @@ public class Usuario implements UserDetails {
 	@Column(name = "token", unique = false, length = 255)
 	private String token;
 	
+	@PrePersist
+	public void prePersist() {
+		this.uuid = UUID.randomUUID().toString();
+	}
+	
 	public UsuarioResponse convertToResponse() {
 		return new UsuarioResponse(this.uuid, this.login, this.nome);
+	}
+	
+	public UsuarioDto convertToDto() {
+		return new UsuarioDto(this.uuid, this.login, this.nome, this.senha);
 	}
 	
 

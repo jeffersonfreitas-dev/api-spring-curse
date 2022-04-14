@@ -32,9 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		//Ativando proteção contra usuario que não estão validados token
 		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-			.disable().authorizeRequests().antMatchers("/**").permitAll()
+			.disable().authorizeRequests().antMatchers("/").permitAll()
 			.antMatchers("/index").permitAll()
-			.antMatchers(HttpMethod.OPTIONS, "/").permitAll()
+			.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.logout().logoutSuccessUrl("/index")
@@ -43,8 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.addFilterBefore(new JWTTokenAutenticacaoController("/login", authenticationManager(), repository), 
 					UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(new JWTApiAutenticacaoFilter(repository), UsernamePasswordAuthenticationFilter.class);
-
-			
 	}
+	
 
 }

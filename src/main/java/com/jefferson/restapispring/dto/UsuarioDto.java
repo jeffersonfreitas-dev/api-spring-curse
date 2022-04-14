@@ -5,9 +5,11 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UsuarioResponse {
+public class UsuarioDto {
 	
 	private String uuid;
 	private String login;
 	private String nome;
+	private String senha;
+
 }
