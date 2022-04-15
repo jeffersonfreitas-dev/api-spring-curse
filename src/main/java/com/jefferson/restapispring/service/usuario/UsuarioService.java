@@ -2,13 +2,14 @@ package com.jefferson.restapispring.service.usuario;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.jefferson.restapispring.dto.UsuarioDto;
-import com.jefferson.restapispring.dto.UsuarioResponse;
 import com.jefferson.restapispring.model.Usuario;
 
 public interface UsuarioService {
 
-	List<UsuarioResponse> findAllUsers();
+	Page<Usuario> findAllUsers(Integer pagina);
 
 	String deleteById(String id);
 

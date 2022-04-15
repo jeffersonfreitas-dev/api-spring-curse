@@ -2,6 +2,7 @@ package com.jefferson.restapispring.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jefferson.restapispring.dto.UsuarioDto;
-import com.jefferson.restapispring.dto.UsuarioResponse;
 import com.jefferson.restapispring.model.Usuario;
 import com.jefferson.restapispring.service.usuario.UsuarioService;
 
@@ -28,11 +28,10 @@ public class UsuariosController {
 	
 	private final UsuarioService service;
 	
-	@GetMapping
+	@GetMapping("page/{pagina}")
 	@ResponseStatus(HttpStatus.OK)
-	public List<UsuarioResponse> findAllUsers(){
-//		throw new RuntimeException("TESTE ERROR");
-		return service.findAllUsers();
+	public Page<Usuario> findAllUsers(@PathVariable Integer pagina){
+		return service.findAllUsers(pagina);
 	}
 	
 	
