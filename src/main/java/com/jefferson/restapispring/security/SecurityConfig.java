@@ -32,9 +32,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		//Ativando proteção contra usuario que não estão validados token
 		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-			.disable().authorizeRequests().antMatchers("/").permitAll()
-			.antMatchers("/index").permitAll()
+			.disable().authorizeRequests()
 			.antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+			.antMatchers("/").permitAll()
+			.antMatchers("/index").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.logout().logoutSuccessUrl("/index")

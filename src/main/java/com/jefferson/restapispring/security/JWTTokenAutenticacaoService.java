@@ -26,7 +26,7 @@ public class JWTTokenAutenticacaoService {
 	private static final long EXPIRATION_TIME = 172800000;
 	private static final String SECRET = "123456";
 	private static final String TOKEN_PREFIX = "Bearer";
-	private static final String HEADER_STRING = "Authorization";
+	private static final String HEADER_STRING = "authorization";
 	
 	
 	//Gerando token e add no response header

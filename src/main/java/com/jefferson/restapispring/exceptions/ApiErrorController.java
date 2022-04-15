@@ -4,12 +4,15 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -22,11 +25,21 @@ public class ApiErrorController extends ResponseEntityExceptionHandler{
 	@ExceptionHandler({Exception.class, RuntimeException.class, Throwable.class, IllegalArgumentException.class})
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
+		
 		ApiError apiError = new ApiError();
 		apiError.setCodigo(status.value());
 		apiError.setMensagem(status.getReasonPhrase());
-		apiError.setErrors(Arrays.asList(ex.getMessage()));
 		apiError.setTimestamp(Timestamp.from(Instant.now()));
+		
+		if(ex instanceof MethodArgumentNotValidException) {
+			List<ObjectError> list = ((MethodArgumentNotValidException) ex).getBindingResult().getAllErrors();
+			for(ObjectError s : list) {
+				apiError.addError(s.getDefaultMessage());
+			}
+		}else {
+			apiError.setErrors(Arrays.asList(ex.getMessage()));
+		}
+		
 		return new ResponseEntity<>(apiError, headers, status);
 	}
 	

@@ -14,4 +14,7 @@ public class ApiError {
 	private List<String> errors = new ArrayList<>();
 	private Timestamp timestamp;
 
+	public void addError(String error){
+		this.errors.add(error);
+	}
 }
