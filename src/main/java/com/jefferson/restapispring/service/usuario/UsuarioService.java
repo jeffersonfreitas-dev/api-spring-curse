@@ -1,7 +1,5 @@
 package com.jefferson.restapispring.service.usuario;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 
 import com.jefferson.restapispring.dto.UsuarioDto;
@@ -13,7 +11,7 @@ public interface UsuarioService {
 
 	String deleteById(String id);
 
-	List<Usuario> findAllByName(String nome);
+	Page<Usuario> findAllByName(String nome);
 
 	UsuarioDto findById(String uuid);
 

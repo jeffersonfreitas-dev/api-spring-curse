@@ -1,7 +1,5 @@
 package com.jefferson.restapispring.service.usuario;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -38,14 +36,18 @@ public class UsuarioServiceImpl implements UsuarioService{
 	}
 
 	@Override
-	public List<Usuario> findAllByName(String nome) {
-		try {
-			if(!nome.isBlank()) return repository.findAllByName(nome);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Erro ao pesquisar o usuário por nome");
+	public Page<Usuario> findAllByName(String nome) {
+		
+		PageRequest pageRequest = PageRequest.of(0, 5, Sort.by("nome"));
+		Page<Usuario> result = null;
+		
+		if(nome == null || nome.isEmpty() || nome.equalsIgnoreCase("undefided")) {
+			result = repository.findAll(pageRequest);
+		}else {
+			result = repository.findAllPage(nome, pageRequest);
 		}
-		return null;
+		
+		return result;
 	}
 
 	

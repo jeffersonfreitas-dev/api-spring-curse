@@ -1,7 +1,5 @@
 package com.jefferson.restapispring.controller;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +41,8 @@ public class UsuariosController {
 	
 	
 	@GetMapping("/search/{nome}")
-	public ResponseEntity<List<Usuario>> findByName(@PathVariable String nome){
-		List<Usuario> list = service.findAllByName(nome);
+	public ResponseEntity<Page<Usuario>> findByName(@PathVariable String nome){
+		Page<Usuario> list = service.findAllByName(nome);
 		return ResponseEntity.ok(list);
 	}
 	
